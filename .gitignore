@@ -52,4 +52,4 @@ baseline.json
 
 # Husky
 .husky/_
-.angular/cache/
+.angular/
