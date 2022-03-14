@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { ActivatedRoute, ParamMap } from "@angular/router";
-import { Post } from "../post.model";
 
 import { PostsService } from "../posts.service";
 
@@ -13,6 +12,7 @@ import { PostsService } from "../posts.service";
 
 export class PostCreateComponent implements OnInit{
 	post: any;
+	isLoading = false;
 	private mode = 'create';
 	private postId: any;
 
@@ -23,7 +23,9 @@ export class PostCreateComponent implements OnInit{
 			if(paramMap.has('postId')){
 				this.mode = 'edit';
 				this.postId = paramMap.get('postId');
+				this.isLoading = true;
 				this.postsService.getPost(this.postId).subscribe(postData => {
+					this.isLoading = false;
 					this.post = { id: postData._id, title: postData.title, content: postData.content }
 				});
 			} else {
@@ -37,6 +39,7 @@ export class PostCreateComponent implements OnInit{
 		if (form.invalid) {
 			return;
 		}
+		this.isLoading = true;
 		if (this.mode == 'create') {
 			this.postsService.addPost(form.value.title, form.value.content);
 		} else {
