@@ -22,7 +22,8 @@ export class PostsService {
 					return {
 						title: post.title,
 						content: post.content,
-						id: post._id
+						id: post._id, 
+						imagePath: post.imagePath
 					}
 				})
 			}))
@@ -42,9 +43,14 @@ export class PostsService {
 		postData.append('content', content);
 		postData.append('image', image, title);
 		this.http
-			.post<{message: string, postId: string}>('http://localhost:3000/api/posts', postData)
+			.post<{message: string, post: Post}>('http://localhost:3000/api/posts', postData)
 			.subscribe(res => {
-				const post:Post = {id: res.postId, title: title, content: content}
+				const post:Post = {
+					id: res.post.id, 
+					title: title, 
+					content: content,
+					imagePath: res.post.imagePath
+				}
 				this.posts.push(post);
 				this.postsUpdated.next([...this.posts]);
 				this.router.navigate(["/"]);
@@ -52,7 +58,7 @@ export class PostsService {
 	}
 
 	updatePost(id: string, title: string, content: string) {
-		const post: Post = { id: id, title: title, content: content }
+		const post: Post = { id: id, title: title, content: content, imagePath: '' }
 		this.http.put('http://localhost:3000/api/posts/' + id, post)
 			.subscribe(response => {
 				console.log(response);
