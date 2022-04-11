@@ -15,7 +15,7 @@ export class PostCreateComponent implements OnInit{
 	post: any;
 	isLoading = false;
 	form!: FormGroup;
-	imagePreview: string;
+	imagePreview!: string;
 	private mode = 'create';
 	private postId: any;
 
